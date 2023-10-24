@@ -30,5 +30,27 @@ export const posts = mysqlTable(
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
+);
+
+export const reminders = mysqlTable(
+  "remind",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    name: varchar("name", { length: 256 }),
+
+    remindAt: timestamp("remind_at").notNull(),
+    email: varchar("email", { length: 256 }).notNull(),
+    userId: varchar("user_id", { length: 256 }).notNull(),
+    repeatPeriodicity: bigint("repeat_periodicity", {
+      mode: "number",
+    }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (example) => ({
+    nameIndex: index("name_idx").on(example.name),
+  }),
 );

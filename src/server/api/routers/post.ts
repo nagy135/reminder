@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { posts } from "~/server/db/schema";
+import { posts, reminders } from "~/server/db/schema";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -28,4 +28,24 @@ export const postRouter = createTRPCRouter({
       orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     });
   }),
+
+  createReminder: publicProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        userId: z.string(),
+        email: z.string().email(),
+        remindAt: z.date(),
+        repeatPeriodicity: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.insert(reminders).values({
+        name: input.name,
+        remindAt: input.remindAt,
+        email: input.email,
+        userId: input.userId,
+        repeatPeriodicity: input.repeatPeriodicity,
+      });
+    }),
 });

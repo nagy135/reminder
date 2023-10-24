@@ -1,26 +1,38 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
 
-export function CreatePost() {
+export function CreateReminder() {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const { user } = useUser();
+  const [name, setName] = useState("test");
+  const [date, setDate] = useState(new Date());
+  const [repeatPeriodicity, setRepeatPeriodicity] = useState(0);
 
-  const createPost = api.post.create.useMutation({
+  const createReminder = api.post.createReminder.useMutation({
     onSuccess: () => {
       router.refresh();
       setName("");
     },
   });
 
+  if (!user) return null;
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ name });
+        createReminder.mutate({
+          name,
+          remindAt: date,
+          repeatPeriodicity,
+          email: "viktor.nagy1995@gmail.com",
+          userId: user.id,
+        });
       }}
       className="flex flex-col gap-2"
     >
@@ -34,9 +46,9 @@ export function CreatePost() {
       <button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createPost.isLoading}
+        disabled={createReminder.isLoading}
       >
-        {createPost.isLoading ? "Submitting..." : "Submit"}
+        {createReminder.isLoading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );
