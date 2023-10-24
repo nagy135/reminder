@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
+import { DatePicker } from "./date-picker";
 
 export function CreateReminder() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export function CreateReminder() {
         onChange={(e) => setName(e.target.value)}
         className="w-full rounded-full px-4 py-2 text-black"
       />
+      <DatePicker />
       <button
         type="submit"
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
