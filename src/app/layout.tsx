@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import { ThemeProvider } from "./_components/providers/theme";
+import { ThemeSwitcher } from "./_components/theme-switcher";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,12 +28,26 @@ export default function RootLayout({
     <html lang="en">
       <ClerkProvider>
         <body className={`font-sans ${inter.variable}`}>
-          <SignedIn>
-            <div className="absolute right-0 m-3">
-              <UserButton />
-            </div>
-          </SignedIn>
-          <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
+          <TRPCReactProvider headers={headers()}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <SignedIn>
+                <div className="absolute right-0 m-3 flex">
+                  <div className="mr-3">
+                    <ThemeSwitcher />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <UserButton />
+                  </div>
+                </div>
+              </SignedIn>
+              {children}
+            </ThemeProvider>
+          </TRPCReactProvider>
         </body>
       </ClerkProvider>
     </html>
