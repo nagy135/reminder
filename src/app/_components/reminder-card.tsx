@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -9,18 +11,28 @@ import {
 import { Periodicity } from "~/enums";
 import { Button } from "./ui/button";
 import { format } from "date-fns";
+import { api } from "~/trpc/react";
+import { useRouter } from "next/navigation";
 
 interface IReminder {
+  id: number;
+  userId: string;
   name: string;
   remindAt: Date;
   repeatPeriodicity: Periodicity;
 }
 
 export default function ReminderCard({
-  reminder: { name, remindAt, repeatPeriodicity },
+  reminder: { name, remindAt, repeatPeriodicity, userId, id },
 }: {
   reminder: IReminder;
 }) {
+  const router = useRouter();
+  const deleteReminder = api.reminder.deleteReminderById.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
   return (
     <Card>
       <CardHeader>
@@ -31,7 +43,12 @@ export default function ReminderCard({
         <p>{format(remindAt, "PPP")}</p>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button variant="destructive">Delete</Button>
+        <Button
+          onClick={() => deleteReminder.mutate({ id: id, userId: userId })}
+          variant="destructive"
+        >
+          Delete
+        </Button>
       </CardFooter>
     </Card>
   );

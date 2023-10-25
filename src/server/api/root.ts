@@ -1,4 +1,4 @@
-import { reminderRouter } from "~/server/api/routers/post";
+import { reminderRouter } from "~/server/api/routers/reminder";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**

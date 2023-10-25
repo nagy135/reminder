@@ -25,6 +25,8 @@ export default async function Home() {
             <ReminderCard
               key={e.id}
               reminder={{
+                id: e.id,
+                userId: user.id,
                 name: e.name,
                 remindAt: e.remindAt,
                 repeatPeriodicity: e.repeatPeriodicity as Periodicity,

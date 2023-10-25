@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -11,6 +11,18 @@ export const reminderRouter = createTRPCRouter({
       return ctx.db.query.reminders.findMany({
         where: eq(reminders.userId, input),
       });
+    }),
+  deleteReminderById: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { id, userId } }) => {
+      await ctx.db
+        .delete(reminders)
+        .where(and(eq(reminders.id, id), eq(reminders.userId, userId)));
     }),
   createReminder: publicProcedure
     .input(
