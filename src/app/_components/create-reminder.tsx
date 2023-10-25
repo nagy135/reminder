@@ -31,6 +31,7 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { useToast } from "./ui/use-toast";
 
 enum Periodicity {
   daily = "DAILY",
@@ -59,11 +60,16 @@ const FormSchema = z.object({
 export function CreateReminder() {
   const { user } = useUser();
   const router = useRouter();
+  const { toast } = useToast();
   const [customPeriodicity, setCustomPeriodicity] = useState(false);
 
   const createReminder = api.post.createReminder.useMutation({
     onSuccess: () => {
       router.refresh();
+      toast({
+        title: "Created successfully",
+        description: "Reminder has been created",
+      });
       form.reset();
     },
   });
