@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs";
 
 import { CreateReminder } from "./_components/create-reminder";
+import { Button } from "./_components/ui/button";
+import Link from "next/link";
 
 export default async function Home() {
   const user = await currentUser();
@@ -8,6 +10,9 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center ">
+      <Button variant="outline" className="absolute left-0 top-0 m-3">
+        <Link href="/profile">My reminders</Link>
+      </Button>
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Reminder

@@ -33,15 +33,7 @@ import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useToast } from "./ui/use-toast";
-
-enum Periodicity {
-  daily = "DAILY",
-  weekly = "WEEKLY",
-  monthly = "MONTHLY",
-  yearly = "YEARLY",
-  oneTime = "ONETIME",
-  custom = "CUSTOM",
-}
+import { Periodicity } from "~/enums";
 
 const FormSchema = z.object({
   name: z
@@ -108,7 +100,8 @@ export function CreateReminder() {
     createReminder.mutate({
       name: data.name,
       remindAt: data.remindAt,
-      repeatPeriodicity: 0,
+      repeatPeriodicity: data.repeatPeriodicity,
+      repeatIntervalSeconds: data.customRepeatPeriodicity ?? 5,
       userId: user.id,
       email: user.primaryEmailAddress.emailAddress,
     });

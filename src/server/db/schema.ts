@@ -22,12 +22,13 @@ export const reminders = mysqlTable(
   "remind",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
 
     remindAt: timestamp("remind_at").notNull(),
     email: varchar("email", { length: 256 }).notNull(),
     userId: varchar("user_id", { length: 256 }).notNull(),
-    repeatPeriodicity: bigint("repeat_periodicity", {
+    repeatPeriodicity: varchar("repeat_periodicity", { length: 256 }).notNull(),
+    repeatIntervalSeconds: bigint("repeat_interval_seconds", {
       mode: "number",
     }).notNull(),
     createdAt: timestamp("created_at")

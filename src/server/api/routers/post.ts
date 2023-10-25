@@ -1,9 +1,17 @@
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { reminders } from "~/server/db/schema";
 
 export const reminderRouter = createTRPCRouter({
+  getRemindersByUserId: publicProcedure
+    .input(z.string())
+    .query(({ ctx, input }) => {
+      return ctx.db.query.reminders.findMany({
+        where: eq(reminders.userId, input),
+      });
+    }),
   createReminder: publicProcedure
     .input(
       z.object({
@@ -11,7 +19,8 @@ export const reminderRouter = createTRPCRouter({
         userId: z.string(),
         email: z.string().email(),
         remindAt: z.date(),
-        repeatPeriodicity: z.number(),
+        repeatPeriodicity: z.string(),
+        repeatIntervalSeconds: z.number(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -21,6 +30,7 @@ export const reminderRouter = createTRPCRouter({
         email: input.email,
         userId: input.userId,
         repeatPeriodicity: input.repeatPeriodicity,
+        repeatIntervalSeconds: input.repeatIntervalSeconds,
       });
     }),
 });
