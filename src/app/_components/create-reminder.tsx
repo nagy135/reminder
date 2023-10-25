@@ -65,7 +65,7 @@ export function CreateReminder() {
   const [customPeriodicity, setCustomPeriodicity] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const createReminder = api.post.createReminder.useMutation({
+  const createReminder = api.reminder.createReminder.useMutation({
     onMutate: () => {
       setProgress(33);
       setTimeout(() => {

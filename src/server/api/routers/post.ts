@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { posts, reminders } from "~/server/db/schema";
+import { reminders } from "~/server/db/schema";
 
-export const postRouter = createTRPCRouter({
+export const reminderRouter = createTRPCRouter({
   createReminder: publicProcedure
     .input(
       z.object({
