@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "~/app/_components/ui/button";
+import { Progress } from "~/app/_components/ui/progress";
 import {
   Form,
   FormControl,
@@ -62,15 +63,26 @@ export function CreateReminder() {
   const router = useRouter();
   const { toast } = useToast();
   const [customPeriodicity, setCustomPeriodicity] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const createReminder = api.post.createReminder.useMutation({
+    onMutate: () => {
+      setProgress(33);
+      setTimeout(() => {
+        setProgress(55);
+      }, 200);
+    },
     onSuccess: () => {
-      router.refresh();
-      toast({
-        title: "Created successfully",
-        description: "Reminder has been created",
-      });
-      form.reset();
+      setProgress(88);
+      setTimeout(() => {
+        router.refresh();
+        toast({
+          title: "Created successfully",
+          description: "Reminder has been created",
+        });
+        setProgress(0);
+        form.reset();
+      }, 1000);
     },
   });
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -100,6 +112,10 @@ export function CreateReminder() {
       userId: user.id,
       email: user.primaryEmailAddress.emailAddress,
     });
+  }
+
+  if (progress) {
+    return <Progress value={progress} />;
   }
 
   return (
