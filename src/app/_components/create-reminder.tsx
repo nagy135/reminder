@@ -28,6 +28,9 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { useState } from "react";
+import { api } from "~/trpc/react";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 enum Periodicity {
   daily = "DAILY",
@@ -54,20 +57,43 @@ const FormSchema = z.object({
 });
 
 export function CreateReminder() {
+  const { user } = useUser();
+  const router = useRouter();
   const [customPeriodicity, setCustomPeriodicity] = useState(false);
+
+  const createReminder = api.post.createReminder.useMutation({
+    onSuccess: () => {
+      router.refresh();
+      form.reset();
+    },
+  });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      name: "My reminder",
+      name: "",
       remindAt: new Date(),
-      repeatPeriodicity: Periodicity.daily,
+      repeatPeriodicity: Periodicity.yearly,
       customRepeatPeriodicity: 5,
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("================\n", "data: ", data, "\n================");
+    if (!user || !user?.id) {
+      alert("Not logged in ...somehow");
+      return;
+    }
+    if (!user.primaryEmailAddress) {
+      alert("You need to have an email address set to create a reminder!");
+      return;
+    }
+    createReminder.mutate({
+      name: data.name,
+      remindAt: data.remindAt,
+      repeatPeriodicity: 0,
+      userId: user.id,
+      email: user.primaryEmailAddress.emailAddress,
+    });
   }
 
   return (
@@ -140,7 +166,7 @@ export function CreateReminder() {
                   setCustomPeriodicity(e === Periodicity.custom);
                   field.onChange(e);
                 }}
-                defaultValue={field.value}
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger>
