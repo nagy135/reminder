@@ -1,11 +1,5 @@
 {
   "redirects": [
     { "source": "/reminders", "destination": "/profile", "statusCode": 301 }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron",
-      "schedule": "* * * * *"
-    }
   ]
 }
