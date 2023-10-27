@@ -22,7 +22,7 @@ export async function GET() {
     html: "<b>Hello world</b>", // html body
   });
 
-  return NextResponse.json({ ok: true, messageId: response.messageId });
+  return NextResponse.json({ ok: true, messageId: response.messageId, timeStamp });
 }
 
 export const fetchCache = 'force-no-store';
