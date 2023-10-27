@@ -89,7 +89,7 @@ export function CreateReminder() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (!user || !user?.id) {
+    if (!user?.id) {
       alert("Not logged in ...somehow");
       return;
     }
@@ -175,7 +175,7 @@ export function CreateReminder() {
               <FormLabel>Periodicity</FormLabel>
               <Select
                 onValueChange={(e) => {
-                  setCustomPeriodicity(e === Periodicity.custom);
+                  setCustomPeriodicity(e == Periodicity.custom.toString());
                   field.onChange(e);
                 }}
                 value={field.value}
