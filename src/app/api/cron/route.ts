@@ -33,7 +33,6 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ 
     messageId: response.messageId,
-    revalidated: true,
     now: Date.now()
   });
 }
