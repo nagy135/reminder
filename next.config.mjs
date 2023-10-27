@@ -13,7 +13,7 @@ const config = {
         headers: [
           {
             key: "Cache-Control",
-            value: "no-store, max-age=1",
+            value: "no-store, max-age=0",
           },
         ],
       },
