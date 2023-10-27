@@ -24,3 +24,5 @@ export async function GET() {
 
   return NextResponse.json({ ok: true, messageId: response.messageId });
 }
+
+export const fetchCache = 'force-no-store';
