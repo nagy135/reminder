@@ -12,10 +12,12 @@ export async function GET() {
     },
   });
 
+  const timeStamp = new Date().toISOString();
+
   const response = await transporter.sendMail({
     from: '"Your Name" <youremail@gmail.com>', // sender address
     to: "legolas1598753@centrum.sk", // list of receivers
-    subject: "test email from vercel", // Subject line
+    subject: `email ${timeStamp}`, // Subject line
     text: "Hello world", // plain text body
     html: "<b>Hello world</b>", // html body
   });
