@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/reminders", "destination": "/profile", "statusCode": 301 }
+  ]
+}
