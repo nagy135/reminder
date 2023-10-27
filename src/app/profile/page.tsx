@@ -17,7 +17,7 @@ export default async function Home() {
         <Link href="/">Add reminder</Link>
       </Button>
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
+        <h1 className="mt-5 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Your reminders
         </h1>
         <div className="m-5 flex w-full flex-col gap-5 md:w-1/2">
