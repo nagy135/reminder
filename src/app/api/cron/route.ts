@@ -12,12 +12,13 @@ export async function GET() {
     },
   });
 
-  await transporter.sendMail({
+  const response = await transporter.sendMail({
     from: '"Your Name" <youremail@gmail.com>', // sender address
     to: "legolas1598753@centrum.sk", // list of receivers
-    subject: "Medium @edigleyssonsilva ✔", // Subject line
-    text: "There is a new article. It's about sending emails, check it out!", // plain text body
-    html: "<b>There is a new article. It's about sending emails, check it out!</b>", // html body
+    subject: "test email from vercel", // Subject line
+    text: "Hello world", // plain text body
+    html: "<b>Hello world</b>", // html body
   });
-  return NextResponse.json({ ok: true });
+
+  return NextResponse.json({ ok: true, messageId: response.messageId });
 }
