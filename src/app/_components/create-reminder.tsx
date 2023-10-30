@@ -28,7 +28,7 @@ import { cn } from "../lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
@@ -40,6 +40,8 @@ const FormSchema = z.object({
     .string({
       required_error: "Please select a name",
     })
+    .min(1, { message: "You must enter a name" })
+    .max(256, { message: "Name too long" })
     .describe("Name"),
   remindAt: z.date({
     required_error: "Please select date of event",
@@ -56,13 +58,23 @@ export function CreateReminder() {
   const { toast } = useToast();
   const [customPeriodicity, setCustomPeriodicity] = useState(false);
   const [progress, setProgress] = useState(0);
+  const progressTimeoutHandle = useRef<NodeJS.Timeout>();
 
   const createReminder = api.reminder.createReminder.useMutation({
     onMutate: () => {
       setProgress(33);
-      setTimeout(() => {
+      progressTimeoutHandle.current = setTimeout(() => {
         setProgress(55);
       }, 200);
+    },
+    onError: (e) => {
+      toast({
+        variant: "destructive",
+        title: "Create failed",
+        description: JSON.stringify(e.data?.zodError?.fieldErrors),
+      });
+      clearTimeout(progressTimeoutHandle.current);
+      setProgress(0);
     },
     onSuccess: () => {
       setProgress(88);
