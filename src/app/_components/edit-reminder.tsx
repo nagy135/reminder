@@ -24,7 +24,7 @@ export function EditReminder({ reminder }: { reminder: Reminder }) {
         <DialogHeader>
           <DialogTitle>Edit reminder</DialogTitle>
           <DialogDescription>
-            Make changes to your reminder here. Click save when you're done.
+            {"Make changes to your reminder here. Click save when you're done."}
           </DialogDescription>
         </DialogHeader>
         <CreateEditReminder
