@@ -5,7 +5,7 @@ import { Periodicity } from "~/enums";
 import { Button } from "../_components/ui/button";
 import Link from "next/link";
 
-export default async function Home() {
+export default async function ProfilePage() {
   const user = await currentUser();
   if (!user) return <div>Not logged in</div>;
 
@@ -13,9 +13,14 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center ">
-      <Button variant="outline" className="absolute left-0 top-0 m-3">
-        <Link href="/">Add reminder</Link>
-      </Button>
+      <div className="absolute left-0 top-0 m-3 flex gap-2">
+        <Button variant="outline" className="">
+          <Link href="/">Add reminder</Link>
+        </Button>
+        <Button variant="secondary" className="">
+          <Link href="/calendar">Calendar</Link>
+        </Button>
+      </div>
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="mt-5 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Your reminders

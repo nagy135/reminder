@@ -4,7 +4,7 @@ import { CreateEditReminder } from "./_components/create-edit-reminder";
 import { Button } from "./_components/ui/button";
 import Link from "next/link";
 
-export default async function Home() {
+export default async function HomePage() {
   const user = await currentUser();
   if (!user) return <div>Not logged in</div>;
 
