@@ -1,0 +1,9 @@
+import Calendar from "../_components/calendar";
+
+export default async function CalendarPage() {
+  return (
+    <div className="m-2 flex justify-center pt-[150px]">
+      <Calendar />
+    </div>
+  );
+}
