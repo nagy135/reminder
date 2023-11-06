@@ -6,6 +6,12 @@ import useScreenWidth from "../hooks/use-screen-width";
 import { type Reminder } from "~/types";
 import { EditReminder } from "./edit-reminder";
 
+const numberOfMonths = (size: number): number => {
+  if (size > 850) return 3;
+  else if (size > 650) return 2;
+  else return 1;
+};
+
 export default function Calendar({ reminders }: { reminders: Reminder[] }) {
   const windowSize = useScreenWidth();
   const [days] = useState<Date[] | undefined>(reminders.map((e) => e.remindAt));
@@ -17,7 +23,7 @@ export default function Calendar({ reminders }: { reminders: Reminder[] }) {
     <>
       <ShadcnCalendar
         mode="multiple"
-        numberOfMonths={windowSize !== null && windowSize > 400 ? 3 : 1}
+        numberOfMonths={windowSize !== null ? numberOfMonths(windowSize) : 1}
         showOutsideDays={false}
         selected={days}
         onSelect={undefined}
