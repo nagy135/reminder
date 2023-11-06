@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { reminders } from "~/server/db/schema";
+import { type Reminder } from "~/types";
 
 export const reminderRouter = createTRPCRouter({
   getRemindersByUserId: publicProcedure
@@ -10,8 +11,13 @@ export const reminderRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.reminders.findMany({
         where: eq(reminders.userId, input),
-      });
+      }) as unknown as Reminder[];
     }),
+  getReminderById: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    return ctx.db.query.reminders.findFirst({
+      where: eq(reminders.id, input),
+    });
+  }),
   deleteReminderById: publicProcedure
     .input(
       z.object({

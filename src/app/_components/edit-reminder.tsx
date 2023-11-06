@@ -11,14 +11,30 @@ import { CreateEditReminder } from "./create-edit-reminder";
 import { type Reminder } from "~/types";
 import { useState } from "react";
 
-export function EditReminder({ reminder }: { reminder: Reminder }) {
-  const [open, setOpen] = useState(false);
+export function EditReminder({
+  reminder,
+  withoutButton,
+  onClose,
+}: {
+  reminder: Reminder;
+  withoutButton?: boolean;
+  onClose?: () => void;
+}) {
+  const [open, setOpen] = useState(withoutButton ? true : false);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(e) => {
+        setOpen(e);
+        !e && onClose?.();
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="default" onClick={() => setOpen(true)}>
-          Edit
-        </Button>
+        {!withoutButton ? (
+          <Button variant="default" onClick={() => setOpen(true)}>
+            Edit
+          </Button>
+        ) : null}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -29,7 +45,10 @@ export function EditReminder({ reminder }: { reminder: Reminder }) {
         </DialogHeader>
         <CreateEditReminder
           reminderToEdit={reminder}
-          closeEditDialog={() => setOpen(false)}
+          closeEditDialog={() => {
+            setOpen(false);
+            onClose?.();
+          }}
         />
       </DialogContent>
     </Dialog>

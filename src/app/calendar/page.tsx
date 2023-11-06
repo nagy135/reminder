@@ -1,7 +1,6 @@
 import { currentUser } from "@clerk/nextjs";
 import Calendar from "../_components/calendar";
 import { api } from "~/trpc/server";
-import { type Reminder } from "~/types";
 import ProfileNavigation from "../_components/profile-navigation";
 
 export default async function CalendarPage() {
@@ -14,7 +13,7 @@ export default async function CalendarPage() {
     <>
       <ProfileNavigation list={true} />
       <div className="m-2 flex justify-center pt-[150px]">
-        <Calendar reminders={reminders as Reminder[]} />
+        <Calendar reminders={reminders} />
       </div>
     </>
   );
