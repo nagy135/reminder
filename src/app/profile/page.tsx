@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import { api } from "~/trpc/server";
 import ReminderCard from "../_components/reminder-card";
-import { Periodicity } from "~/enums";
+import { type Periodicity } from "~/enums";
 import ProfileNavigation from "../_components/profile-navigation";
 
 export default async function ProfilePage() {

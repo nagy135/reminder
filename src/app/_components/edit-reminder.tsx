@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "~/app/_components/ui/dialog";
 import { CreateEditReminder } from "./create-edit-reminder";
-import { Reminder } from "~/types";
+import { type Reminder } from "~/types";
 import { useState } from "react";
 
 export function EditReminder({ reminder }: { reminder: Reminder }) {

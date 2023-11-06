@@ -34,7 +34,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useToast } from "./ui/use-toast";
 import { Periodicity } from "~/enums";
-import { Reminder } from "~/types";
+import { type Reminder } from "~/types";
 
 const FormSchema = z.object({
   name: z

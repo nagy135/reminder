@@ -1,4 +1,4 @@
-import { Periodicity } from "~/enums";
+import { type Periodicity } from "~/enums";
 
 export type Reminder = {
   id: number;

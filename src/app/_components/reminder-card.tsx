@@ -14,7 +14,7 @@ import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EditReminder } from "./edit-reminder";
-import { Reminder } from "~/types";
+import { type Reminder } from "~/types";
 
 export default function ReminderCard({ reminder }: { reminder: Reminder }) {
   const { name, remindAt, repeatPeriodicity, userId, id } = reminder;

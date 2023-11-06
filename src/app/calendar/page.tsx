@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import Calendar from "../_components/calendar";
 import { api } from "~/trpc/server";
-import { Reminder } from "~/types";
+import { type Reminder } from "~/types";
 import ProfileNavigation from "../_components/profile-navigation";
 
 export default async function CalendarPage() {

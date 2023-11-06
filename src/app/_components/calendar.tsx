@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Calendar as ShadcnCalendar } from "../_components/ui/calendar";
 import useScreenWidth from "../hooks/use-screen-width";
-import { Reminder } from "~/types";
+import { type Reminder } from "~/types";
 
 export default function Calendar({ reminders }: { reminders: Reminder[] }) {
   const windowSize = useScreenWidth();
