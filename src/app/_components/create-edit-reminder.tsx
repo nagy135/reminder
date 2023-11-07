@@ -55,7 +55,7 @@ const FormSchema = z.object({
 
 type CreateEditReminder = {
   reminderToEdit?: Reminder;
-  closeEditDialog?: () => void;
+  closeEditDialog?: (deletedId?: number) => void;
 };
 export function CreateEditReminder({
   reminderToEdit,
@@ -146,17 +146,16 @@ export function CreateEditReminder({
       clearTimeout(progressTimeoutHandle.current);
       setProgress(0);
     },
-    onSuccess: () => {
+    onSuccess: (_data, { id }) => {
       setProgress(88);
       setTimeout(() => {
         router.refresh();
         toast({
           title: "Deleted successfully",
-          variant: "destructive",
           description: "Reminder has been deleted",
         });
         setProgress(0);
-        closeEditDialog?.();
+        closeEditDialog?.(id);
         form.reset();
       }, 1000);
     },

@@ -5,6 +5,7 @@ import { Calendar as ShadcnCalendar } from "../_components/ui/calendar";
 import useScreenWidth from "../hooks/use-screen-width";
 import { type Reminder } from "~/types";
 import { EditReminder } from "./edit-reminder";
+import { useRouter } from "next/navigation";
 
 const numberOfMonths = (size: number): number => {
   if (size > 850) return 3;
@@ -14,7 +15,10 @@ const numberOfMonths = (size: number): number => {
 
 export default function Calendar({ reminders }: { reminders: Reminder[] }) {
   const windowSize = useScreenWidth();
-  const [days] = useState<Date[] | undefined>(reminders.map((e) => e.remindAt));
+  const router = useRouter();
+  const [days, setDays] = useState<Date[] | undefined>(
+    reminders.map((e) => e.remindAt),
+  );
   const [reminderToEdit, setReminderToEdit] = useState<Reminder | undefined>(
     undefined,
   );
@@ -37,7 +41,14 @@ export default function Calendar({ reminders }: { reminders: Reminder[] }) {
         <EditReminder
           reminder={reminderToEdit}
           withoutButton
-          onClose={() => setReminderToEdit(undefined)}
+          onClose={(deletedId?: number) => {
+            setReminderToEdit(undefined);
+            if (deletedId) {
+              reminders = reminders.filter((e) => e.id !== deletedId);
+              setDays(reminders.map((e) => e.remindAt));
+              router.refresh();
+            }
+          }}
         />
       )}
     </>

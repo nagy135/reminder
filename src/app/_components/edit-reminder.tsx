@@ -18,7 +18,7 @@ export function EditReminder({
 }: {
   reminder: Reminder;
   withoutButton?: boolean;
-  onClose?: () => void;
+  onClose?: (deletedId?: number) => void;
 }) {
   const [open, setOpen] = useState(withoutButton ? true : false);
   return (
@@ -45,9 +45,9 @@ export function EditReminder({
         </DialogHeader>
         <CreateEditReminder
           reminderToEdit={reminder}
-          closeEditDialog={() => {
+          closeEditDialog={(deletedId?: number) => {
             setOpen(false);
-            onClose?.();
+            onClose?.(deletedId);
           }}
         />
       </DialogContent>
