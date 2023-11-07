@@ -129,6 +129,38 @@ export function CreateEditReminder({
       }, 1000);
     },
   });
+
+  const deleteReminder = api.reminder.deleteReminderById.useMutation({
+    onMutate: () => {
+      setProgress(33);
+      progressTimeoutHandle.current = setTimeout(() => {
+        setProgress(55);
+      }, 200);
+    },
+    onError: (e) => {
+      toast({
+        variant: "destructive",
+        title: "Delete failed",
+        description: JSON.stringify(e.data?.zodError?.fieldErrors),
+      });
+      clearTimeout(progressTimeoutHandle.current);
+      setProgress(0);
+    },
+    onSuccess: () => {
+      setProgress(88);
+      setTimeout(() => {
+        router.refresh();
+        toast({
+          title: "Deleted successfully",
+          variant: "destructive",
+          description: "Reminder has been deleted",
+        });
+        setProgress(0);
+        closeEditDialog?.();
+        form.reset();
+      }, 1000);
+    },
+  });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     mode: "onChange",
@@ -280,8 +312,22 @@ export function CreateEditReminder({
             )}
           />
         ) : null}
-        <div className="flex justify-end">
-          <Button type="submit">Submit</Button>
+        <div className="flex justify-end gap-2">
+          {reminderToEdit && (
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() =>
+                deleteReminder.mutate({
+                  id: reminderToEdit.id,
+                  userId: user?.id ?? "",
+                })
+              }
+            >
+              Delete
+            </Button>
+          )}
+          <Button type="submit">{reminderToEdit ? "Update" : "Create"}</Button>
         </div>
       </form>
     </Form>
