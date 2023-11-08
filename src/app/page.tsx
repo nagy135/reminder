@@ -15,7 +15,7 @@ export default async function HomePage() {
       </Button>
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Reminder
+          reminder
         </h1>
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-xl font-bold tracking-tight sm:text-[2rem]">
