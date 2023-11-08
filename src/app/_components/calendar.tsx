@@ -32,9 +32,10 @@ export default function Calendar({ reminders }: { reminders: Reminder[] }) {
         selected={days}
         onSelect={undefined}
         onDayClick={(e) => {
-          setReminderToEdit(
-            reminders.find((r) => r.remindAt.getTime() === e.getTime()),
+          const matchedDate = reminders.find(
+            (r) => r.remindAt.toDateString() === e.toDateString(),
           );
+          setReminderToEdit(matchedDate);
         }}
       />
       {reminderToEdit && (
