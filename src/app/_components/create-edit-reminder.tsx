@@ -55,10 +55,12 @@ const FormSchema = z.object({
 
 type CreateEditReminder = {
   reminderToEdit?: Reminder;
-  closeEditDialog?: (deletedId?: number) => void;
+  preselectedDate?: Date;
+  closeEditDialog?: (deletedId?: number, addedDate?: Date) => void;
 };
 export function CreateEditReminder({
   reminderToEdit,
+  preselectedDate,
   closeEditDialog,
 }: CreateEditReminder) {
   const { user } = useUser();
@@ -116,7 +118,7 @@ export function CreateEditReminder({
       clearTimeout(progressTimeoutHandle.current);
       setProgress(0);
     },
-    onSuccess: () => {
+    onSuccess: (_data, { remindAt }) => {
       setProgress(88);
       setTimeout(() => {
         router.refresh();
@@ -125,6 +127,7 @@ export function CreateEditReminder({
           description: "Reminder has been created",
         });
         setProgress(0);
+        closeEditDialog?.(undefined, remindAt);
         form.reset();
       }, 1000);
     },
@@ -165,7 +168,7 @@ export function CreateEditReminder({
     mode: "onChange",
     defaultValues: {
       name: reminderToEdit?.name ?? "",
-      remindAt: reminderToEdit?.remindAt ?? new Date(),
+      remindAt: reminderToEdit?.remindAt ?? preselectedDate ?? new Date(),
       repeatPeriodicity:
         reminderToEdit?.repeatPeriodicity ?? Periodicity.yearly,
       customRepeatPeriodicity: reminderToEdit?.repeatIntervalSeconds ?? 5,

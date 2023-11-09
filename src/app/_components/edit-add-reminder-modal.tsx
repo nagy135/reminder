@@ -11,14 +11,16 @@ import { CreateEditReminder } from "./create-edit-reminder";
 import { type Reminder } from "~/types";
 import { useState } from "react";
 
-export function EditReminder({
+export function EditAddReminderModal({
   reminder,
+  preselectedDate,
   withoutButton,
   onClose,
 }: {
-  reminder: Reminder;
+  reminder?: Reminder;
+  preselectedDate?: Date;
   withoutButton?: boolean;
-  onClose?: (deletedId?: number) => void;
+  onClose?: (deletedId?: number, addedDate?: Date) => void;
 }) {
   const [open, setOpen] = useState(withoutButton ? true : false);
   return (
@@ -32,22 +34,23 @@ export function EditReminder({
       <DialogTrigger asChild>
         {!withoutButton ? (
           <Button variant="default" onClick={() => setOpen(true)}>
-            Edit
+            {reminder ? "Edit" : "Add"}
           </Button>
         ) : null}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit reminder</DialogTitle>
+          <DialogTitle>{reminder ? "Edit" : "Add"} reminder</DialogTitle>
           <DialogDescription>
             {"Make changes to your reminder here. Click save when you're done."}
           </DialogDescription>
         </DialogHeader>
         <CreateEditReminder
           reminderToEdit={reminder}
-          closeEditDialog={(deletedId?: number) => {
+          preselectedDate={preselectedDate}
+          closeEditDialog={(deletedId?: number, addedDate?: Date) => {
             setOpen(false);
-            onClose?.(deletedId);
+            onClose?.(deletedId, addedDate);
           }}
         />
       </DialogContent>

@@ -13,7 +13,7 @@ import { format } from "date-fns";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { EditReminder } from "./edit-reminder";
+import { EditAddReminderModal } from "./edit-add-reminder-modal";
 import { type Reminder } from "~/types";
 
 export default function ReminderCard({ reminder }: { reminder: Reminder }) {
@@ -45,7 +45,7 @@ export default function ReminderCard({ reminder }: { reminder: Reminder }) {
         <p>{format(remindAt, "PPP")}</p>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <EditReminder reminder={reminder} />
+        <EditAddReminderModal reminder={reminder} />
 
         <Button
           onClick={() => deleteReminder.mutate({ id: id, userId: userId })}
