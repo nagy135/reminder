@@ -103,7 +103,7 @@ export function CreateEditReminder({
           description: "Reminder has been updated",
         });
         setProgress(0);
-        closeEditDialog?.();
+        closeEditDialog?.({});
         form.reset();
       }, 1000);
     },
@@ -133,7 +133,7 @@ export function CreateEditReminder({
           description: "Reminder has been created",
         });
         setProgress(0);
-        closeEditDialog?.(undefined, remindAt);
+        closeEditDialog?.({addedDate: remindAt});
         form.reset();
       }, 1000);
     },
@@ -164,7 +164,7 @@ export function CreateEditReminder({
           description: "Reminder has been deleted",
         });
         setProgress(0);
-        closeEditDialog?.(id);
+        closeEditDialog?.({ deletedId: id });
         form.reset();
       }, 1000);
     },
