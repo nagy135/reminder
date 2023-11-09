@@ -20,7 +20,10 @@ export function EditAddReminderModal({
   reminder?: Reminder;
   preselectedDate?: Date;
   withoutButton?: boolean;
-  onClose?: (deletedId?: number, addedDate?: Date) => void;
+  onClose?: ({
+    deletedId,
+    addedDate,
+  }: Partial<{ deletedId: number; addedDate: Date }>) => void;
 }) {
   const [open, setOpen] = useState(withoutButton ? true : false);
   return (
@@ -28,7 +31,7 @@ export function EditAddReminderModal({
       open={open}
       onOpenChange={(e) => {
         setOpen(e);
-        !e && onClose?.();
+        !e && onClose?.({});
       }}
     >
       <DialogTrigger asChild>
@@ -48,9 +51,9 @@ export function EditAddReminderModal({
         <CreateEditReminder
           reminderToEdit={reminder}
           preselectedDate={preselectedDate}
-          closeEditDialog={(deletedId?: number, addedDate?: Date) => {
+          closeEditDialog={({ deletedId, addedDate }) => {
             setOpen(false);
-            onClose?.(deletedId, addedDate);
+            onClose?.({ deletedId, addedDate });
           }}
         />
       </DialogContent>

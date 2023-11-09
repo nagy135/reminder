@@ -56,7 +56,13 @@ const FormSchema = z.object({
 type CreateEditReminder = {
   reminderToEdit?: Reminder;
   preselectedDate?: Date;
-  closeEditDialog?: (deletedId?: number, addedDate?: Date) => void;
+  closeEditDialog?: ({
+    deletedId,
+    addedDate,
+  }: Partial<{
+    deletedId: number;
+    addedDate: Date;
+  }>) => void;
 };
 export function CreateEditReminder({
   reminderToEdit,

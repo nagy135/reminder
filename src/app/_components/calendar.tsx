@@ -46,7 +46,7 @@ export default function Calendar({ reminders }: { reminders: Reminder[] }) {
           reminder={reminderToEdit}
           preselectedDate={preselectedDate}
           withoutButton
-          onClose={(deletedId?: number, addedDate?: Date) => {
+          onClose={({ deletedId, addedDate }) => {
             setReminderToEdit(undefined);
             setPreselectedDate(undefined);
             if (deletedId) {
