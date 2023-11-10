@@ -10,6 +10,15 @@ const forceRevalidate = (request: NextRequest) => {
   revalidatePath(path);
 };
 
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
+    user: env.GMAIL_USER,
+    pass: env.GMAIL_PASSWORD,
+  },
+});
+
 export async function GET(request: NextRequest) {
   forceRevalidate(request);
 
