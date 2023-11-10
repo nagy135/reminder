@@ -36,7 +36,7 @@ export const ReminderEmail = ({
           </Text>
           <Text style={text}>
             You got new reminder with name <strong>{name}</strong> due to{" "}
-            {remindAt}.
+            <strong>{remindAt}</strong>.
           </Text>
           <Text style={text}> Go check it out! </Text>
 
