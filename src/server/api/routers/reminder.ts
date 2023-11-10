@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, lt } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -6,6 +6,13 @@ import { reminders } from "~/server/db/schema";
 import { type Reminder } from "~/types";
 
 export const reminderRouter = createTRPCRouter({
+  getRemindersByRemindAt: publicProcedure
+    .input(z.date())
+    .query(({ ctx, input }) => {
+      return ctx.db.query.reminders.findMany({
+        where: lt(reminders.remindAt, input),
+      }) as unknown as Reminder[];
+    }),
   getRemindersByUserId: publicProcedure
     .input(z.string())
     .query(({ ctx, input }) => {
