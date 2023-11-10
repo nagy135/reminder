@@ -1,15 +1,16 @@
+import ReminderEmail from "@email/reminder";
 import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { render } from "@react-email/render";
 import { env } from "process";
 
- const forceRevalidate = (request: NextRequest) => {
+const forceRevalidate = (request: NextRequest) => {
   const path = request.nextUrl.searchParams.get("path") || "/";
   revalidatePath(path);
 };
 
 export async function GET(request: NextRequest) {
-
   forceRevalidate(request);
 
   const transporter = nodemailer.createTransport({
@@ -27,14 +28,13 @@ export async function GET(request: NextRequest) {
     from: '"Your Name" <youremail@gmail.com>', // sender address
     to: "legolas1598753@centrum.sk", // list of receivers
     subject: `email ${timeStamp}`, // Subject line
-    text: "Hello world", // plain text body
-    html: "<b>Hello world</b>", // html body
+    html: render(ReminderEmail({})),
   });
 
-  return NextResponse.json({ 
+  return NextResponse.json({
     messageId: response.messageId,
-    now: Date.now()
+    now: Date.now(),
   });
 }
 
-export const fetchCache = 'force-no-store';
+export const fetchCache = "force-no-store";
