@@ -7,7 +7,7 @@
     "db:push": "dotenv drizzle-kit push:mysql",
     "db:studio": "dotenv drizzle-kit studio",
     "dev": "next dev",
-    "email": "email dev",
+    "preview-email": "email dev",
     "lint": "next lint",
     "start": "next start"
   },
