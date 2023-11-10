@@ -25,9 +25,9 @@ export async function GET(request: NextRequest) {
   const timeStamp = new Date().toISOString();
 
   const response = await transporter.sendMail({
-    from: '"Your Name" <youremail@gmail.com>', // sender address
+    from: '"Your reminder god" <reminder-god@gmail.com>', // sender address
     to: "legolas1598753@centrum.sk", // list of receivers
-    subject: `email ${timeStamp}`, // Subject line
+    subject: `new reminder!`, // Subject line
     html: render(ReminderEmail({})),
   });
 
