@@ -6,3 +6,9 @@ export enum Periodicity {
   oneTime = "ONETIME",
   custom = "CUSTOM",
 }
+
+export enum Page {
+  home = "home",
+  profile = "profile",
+  calendar = "calendar",
+}

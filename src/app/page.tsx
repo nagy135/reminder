@@ -1,8 +1,8 @@
 import { currentUser } from "@clerk/nextjs";
 
 import { CreateEditReminder } from "./_components/create-edit-reminder";
-import { Button } from "./_components/ui/button";
-import Link from "next/link";
+import Navigation from "./_components/navigation";
+import { Page } from "~/enums";
 
 export default async function HomePage() {
   const user = await currentUser();
@@ -10,9 +10,7 @@ export default async function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center ">
-      <Button variant="outline" className="absolute left-0 top-0 m-3">
-        <Link href="/profile">Your reminders</Link>
-      </Button>
+      <Navigation currentPage={Page.home} />
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           reminder

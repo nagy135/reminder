@@ -1,7 +1,8 @@
 import { currentUser } from "@clerk/nextjs";
 import Calendar from "../_components/calendar";
 import { api } from "~/trpc/server";
-import ProfileNavigation from "../_components/profile-navigation";
+import Navigation from "../_components/navigation";
+import { Page } from "~/enums";
 
 export default async function CalendarPage() {
   const user = await currentUser();
@@ -11,7 +12,7 @@ export default async function CalendarPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center">
-      <ProfileNavigation list={true} />
+      <Navigation currentPage={Page.calendar} />
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="mt-5 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Calendar

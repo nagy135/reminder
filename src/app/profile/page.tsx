@@ -1,8 +1,8 @@
 import { currentUser } from "@clerk/nextjs";
 import { api } from "~/trpc/server";
 import ReminderCard from "../_components/reminder-card";
-import { type Periodicity } from "~/enums";
-import ProfileNavigation from "../_components/profile-navigation";
+import { Page, type Periodicity } from "~/enums";
+import Navigation from "../_components/navigation";
 
 export default async function ProfilePage() {
   const user = await currentUser();
@@ -12,7 +12,7 @@ export default async function ProfilePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <ProfileNavigation />
+      <Navigation currentPage={Page.profile} />
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <h1 className="mt-5 text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Your reminders
