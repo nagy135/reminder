@@ -25,6 +25,7 @@ export default async function ProfilePage() {
                 id: e.id,
                 userId: user.id,
                 name: e.name,
+                email: e.email,
                 remindAt: e.remindAt,
                 repeatPeriodicity: e.repeatPeriodicity as Periodicity,
                 repeatIntervalSeconds: e.repeatIntervalSeconds,
