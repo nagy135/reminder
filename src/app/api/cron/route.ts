@@ -4,6 +4,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 import { env } from "process";
+import { api } from "~/trpc/server";
+import { cutStringUntilChar } from "~/helpers";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const forceRevalidate = (request: NextRequest) => {
   const path = request.nextUrl.searchParams.get("path") || "/";
@@ -22,26 +25,38 @@ const transporter = nodemailer.createTransport({
 export async function GET(request: NextRequest) {
   forceRevalidate(request);
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    auth: {
-      user: env.GMAIL_USER,
-      pass: env.GMAIL_PASSWORD,
-    },
-  });
+  const reminders = await api.reminder.getRemindersByRemindAt.query(new Date());
 
-  const timeStamp = new Date().toISOString();
+  const sendEmailPromises: Promise<SMTPTransport.SentMessageInfo>[] = [];
+  const deletePromises: Promise<void>[] = [];
 
-  const response = await transporter.sendMail({
-    from: '"Your reminder god" <reminder-god@gmail.com>', // sender address
-    to: "legolas1598753@centrum.sk", // list of receivers
-    subject: `new reminder!`, // Subject line
-    html: render(ReminderEmail({})),
-  });
+  for (const reminder of reminders) {
+    const sendEmailPromise = transporter.sendMail({
+      from: '"Your reminder god" <reminder-god@gmail.com>',
+      to: reminder.email,
+      subject: `new reminder!`,
+      html: render(
+        ReminderEmail({
+          username: cutStringUntilChar(reminder.email, "@"),
+          name: reminder.name,
+          remindAt: reminder.remindAt.toDateString(),
+        }),
+      ),
+    });
+    sendEmailPromises.push(sendEmailPromise);
+
+    const deletePromise = api.reminder.deleteReminderById.mutate({
+      id: reminder.id,
+      userId: reminder.userId,
+    });
+    deletePromises.push(deletePromise);
+  }
+
+  await Promise.all(sendEmailPromises);
+  await Promise.all(deletePromises);
 
   return NextResponse.json({
-    messageId: response.messageId,
+    success: true,
     now: Date.now(),
   });
 }

@@ -133,7 +133,7 @@ export function CreateEditReminder({
           description: "Reminder has been created",
         });
         setProgress(0);
-        closeEditDialog?.({addedDate: remindAt});
+        closeEditDialog?.({ addedDate: remindAt });
         form.reset();
       }, 1000);
     },
