@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Page } from "~/enums";
-import { ComponentProps } from "react";
+import { type ComponentProps } from "react";
 
 const linksToShow: Record<
   Page,

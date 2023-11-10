@@ -6,7 +6,7 @@ import { render } from "@react-email/render";
 import { env } from "process";
 import { api } from "~/trpc/server";
 import { cutStringUntilChar } from "~/helpers";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
+import type SMTPTransport from "nodemailer/lib/smtp-transport";
 
 const forceRevalidate = (request: NextRequest) => {
   const path = request.nextUrl.searchParams.get("path") || "/";
