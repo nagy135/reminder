@@ -8,26 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "~/app/_components/ui/card";
-import { Periodicity } from "~/enums";
 import { Button } from "./ui/button";
 import { format } from "date-fns";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { EditReminder } from "./edit-reminder";
+import { Reminder } from "~/types";
 
-interface IReminder {
-  id: number;
-  userId: string;
-  name: string;
-  remindAt: Date;
-  repeatPeriodicity: Periodicity;
-}
-
-export default function ReminderCard({
-  reminder: { name, remindAt, repeatPeriodicity, userId, id },
-}: {
-  reminder: IReminder;
-}) {
+export default function ReminderCard({ reminder }: { reminder: Reminder }) {
+  const { name, remindAt, repeatPeriodicity, userId, id } = reminder;
   const [deleted, setDeleted] = useState(false);
   const router = useRouter();
   const deleteReminder = api.reminder.deleteReminderById.useMutation({
@@ -54,7 +44,9 @@ export default function ReminderCard({
       <CardContent>
         <p>{format(remindAt, "PPP")}</p>
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end gap-2">
+        <EditReminder reminder={reminder} />
+
         <Button
           onClick={() => deleteReminder.mutate({ id: id, userId: userId })}
           variant="destructive"

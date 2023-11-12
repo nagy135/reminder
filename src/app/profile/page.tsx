@@ -30,6 +30,7 @@ export default async function Home() {
                 name: e.name,
                 remindAt: e.remindAt,
                 repeatPeriodicity: e.repeatPeriodicity as Periodicity,
+                repeatIntervalSeconds: e.repeatIntervalSeconds,
               }}
             />
           ))}

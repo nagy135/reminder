@@ -45,4 +45,30 @@ export const reminderRouter = createTRPCRouter({
         repeatIntervalSeconds: input.repeatIntervalSeconds,
       });
     }),
+
+  updateReminder: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string().min(1),
+        userId: z.string(),
+        email: z.string().email(),
+        remindAt: z.date(),
+        repeatPeriodicity: z.string(),
+        repeatIntervalSeconds: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(reminders)
+        .set({
+          name: input.name,
+          remindAt: input.remindAt,
+          email: input.email,
+          userId: input.userId,
+          repeatPeriodicity: input.repeatPeriodicity,
+          repeatIntervalSeconds: input.repeatIntervalSeconds,
+        })
+        .where(eq(reminders.id, input.id));
+    }),
 });

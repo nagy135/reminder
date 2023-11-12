@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs";
 
-import { CreateReminder } from "./_components/create-reminder";
+import { CreateEditReminder } from "./_components/create-edit-reminder";
 import { Button } from "./_components/ui/button";
 import Link from "next/link";
 
@@ -22,7 +22,7 @@ export default async function Home() {
             Hello {user?.firstName}
           </h3>
         </div>
-        <CreateReminder />
+        <CreateEditReminder />
       </div>
     </main>
   );

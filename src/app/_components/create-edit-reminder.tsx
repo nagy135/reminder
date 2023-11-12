@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useToast } from "./ui/use-toast";
 import { Periodicity } from "~/enums";
+import { Reminder } from "~/types";
 
 const FormSchema = z.object({
   name: z
@@ -52,14 +53,53 @@ const FormSchema = z.object({
   customRepeatPeriodicity: z.coerce.number().optional(),
 });
 
-export function CreateReminder() {
+type CreateEditReminder = {
+  reminderToEdit?: Reminder;
+  closeEditDialog?: () => void;
+};
+export function CreateEditReminder({
+  reminderToEdit,
+  closeEditDialog,
+}: CreateEditReminder) {
   const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
-  const [customPeriodicity, setCustomPeriodicity] = useState(false);
+  const [customPeriodicity, setCustomPeriodicity] = useState(
+    reminderToEdit?.repeatPeriodicity === Periodicity.custom,
+  );
   const [progress, setProgress] = useState(0);
   const progressTimeoutHandle = useRef<NodeJS.Timeout>();
 
+  const updateReminder = api.reminder.updateReminder.useMutation({
+    onMutate: () => {
+      setProgress(33);
+      progressTimeoutHandle.current = setTimeout(() => {
+        setProgress(55);
+      }, 200);
+    },
+    onError: (e) => {
+      toast({
+        variant: "destructive",
+        title: "Update failed",
+        description: JSON.stringify(e.data?.zodError?.fieldErrors),
+      });
+      clearTimeout(progressTimeoutHandle.current);
+      setProgress(0);
+    },
+    onSuccess: () => {
+      setProgress(88);
+      setTimeout(() => {
+        router.refresh();
+        toast({
+          title: "Updated successfully",
+          description: "Reminder has been updated",
+        });
+        setProgress(0);
+        closeEditDialog?.();
+        form.reset();
+      }, 1000);
+    },
+  });
   const createReminder = api.reminder.createReminder.useMutation({
     onMutate: () => {
       setProgress(33);
@@ -93,10 +133,11 @@ export function CreateReminder() {
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      remindAt: new Date(),
-      repeatPeriodicity: Periodicity.yearly,
-      customRepeatPeriodicity: 5,
+      name: reminderToEdit?.name ?? "",
+      remindAt: reminderToEdit?.remindAt ?? new Date(),
+      repeatPeriodicity:
+        reminderToEdit?.repeatPeriodicity ?? Periodicity.yearly,
+      customRepeatPeriodicity: reminderToEdit?.repeatIntervalSeconds ?? 5,
     },
   });
 
@@ -109,14 +150,19 @@ export function CreateReminder() {
       alert("You need to have an email address set to create a reminder!");
       return;
     }
-    createReminder.mutate({
+    const newValues = {
       name: data.name,
       remindAt: data.remindAt,
       repeatPeriodicity: data.repeatPeriodicity,
       repeatIntervalSeconds: data.customRepeatPeriodicity ?? 5,
       userId: user.id,
       email: user.primaryEmailAddress.emailAddress,
-    });
+    };
+    if (reminderToEdit) {
+      updateReminder.mutate({ id: reminderToEdit.id, ...newValues });
+    } else {
+      createReminder.mutate(newValues);
+    }
   }
 
   if (progress) {
@@ -125,7 +171,10 @@ export function CreateReminder() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={`${!reminderToEdit ? "w-2/3" : ""} space-y-6`}
+      >
         <FormField
           control={form.control}
           name="name"
@@ -231,7 +280,9 @@ export function CreateReminder() {
             )}
           />
         ) : null}
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-end">
+          <Button type="submit">Submit</Button>
+        </div>
       </form>
     </Form>
   );
